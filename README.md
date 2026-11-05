@@ -81,9 +81,9 @@ states the layout and the references between skills.
 ## The dependency
 
 The `personal` plugin declares the `guardrail` plugin in its `dependencies`.
-A native user of Grove's `linkuistics` plugin receives `guardrail` with the
-personal skills. The dependency keeps that for a native user of the `personal`
-plugin, as the `writing` plugin keeps its hooks plugin. A Ravel user takes the
+A native user of Grove's former `linkuistics` plugin received `guardrail` with
+the personal skills. The dependency keeps that for a native user of the
+`personal` plugin, as the `writing` plugin keeps its hooks plugin. A Ravel user takes the
 craft skills from the `personal` source and enables only the `guardrail`
 plugin.
 
@@ -109,8 +109,7 @@ section states.
 
 ### Claude Code plugins
 
-Grove's marketplace lists these plugins after the Grove change that removes
-the `linkuistics` plugin. Then install them as follows:
+Grove's marketplace lists these plugins. Install them as follows:
 
 ```text
 /plugin marketplace add Linkuistics/grove
@@ -128,10 +127,10 @@ Grove's manual installer links the craft skills into Codex, Gemini CLI and Pi:
 <grove checkout>/plugins/install.sh --pack <personal checkout>/plugins/personal
 ```
 
-Until the Grove change that removes the `linkuistics` plugin, Grove ships its
-own copies of these skills. The installer refuses a skill name that two
-scanned plugins ship. A Grove checkout that still holds those copies therefore
-does not install this pack.
+The installer refuses a skill name that two scanned plugins ship. Older Grove
+commits hold copies of these skills in `plugins/linkuistics`, so their
+installer does not install this pack. Use a Grove checkout without
+`plugins/linkuistics`.
 
 ## Checks
 
