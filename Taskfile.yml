@@ -1,0 +1,47 @@
+version: '3'
+
+# The checks of the personal pack. The pack holds craft skills and the
+# guardrail plugin, and no kind skill. Grove's conformance reads only kind
+# skills, so these checks need no Grove checkout and no GROVE_COMMIT.
+
+set: [errexit, nounset, pipefail]
+
+vars:
+  PACK: plugins/personal
+  GUARDRAIL_PLUGIN: plugins/guardrail
+  GUARDRAIL_SCRIPTS: plugins/guardrail/skills/guardrail/scripts
+
+tasks:
+  check:plugin:
+    desc: Validate both Claude Code plugins, the personal plugin and the guardrail plugin, or skip when Claude Code is not installed
+    cmds:
+      - |
+        if ! command -v claude >/dev/null 2>&1; then
+          echo "skipping check:plugin: Claude Code is not installed"
+          exit 0
+        fi
+        claude plugin validate '{{.PACK}}'
+        claude plugin validate '{{.GUARDRAIL_PLUGIN}}'
+
+  check:guardrail-test:
+    desc: Run the tests of the guardrail hook
+    cmds:
+      - bash '{{.ROOT_DIR}}/{{.GUARDRAIL_SCRIPTS}}/guardrail-hook.test.sh'
+
+  check:shellcheck:
+    desc: Lint the guardrail hook, its tests and the frontmatter check with ShellCheck
+    cmds:
+      - shellcheck '{{.ROOT_DIR}}/{{.GUARDRAIL_SCRIPTS}}/guardrail-hook.sh' '{{.ROOT_DIR}}/{{.GUARDRAIL_SCRIPTS}}/guardrail-hook.test.sh' '{{.ROOT_DIR}}/scripts/check-frontmatter.sh'
+
+  check:frontmatter:
+    desc: Check that each skill declares harnesses, and that the user-invoked skills keep disable-model-invocation
+    cmds:
+      - bash '{{.ROOT_DIR}}/scripts/check-frontmatter.sh' '{{.ROOT_DIR}}'
+
+  check:
+    desc: Run every check of the pack
+    cmds:
+      - task: check:plugin
+      - task: check:frontmatter
+      - task: check:guardrail-test
+      - task: check:shellcheck
