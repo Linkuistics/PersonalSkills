@@ -1,13 +1,13 @@
 ---
 name: authoring-conventions
-description: House authoring conventions for this marketplace's skills — a thin delta over superpowers' writing-skills covering our description-shape rule (capability + "Use when", overriding upstream's when-only), the user/model-invoked lever, source-citation, and progressive-disclosure thresholds. Use when authoring, auditing, or reshaping a SKILL.md in this repo; user-invoked, run it by hand.
+description: House authoring conventions for the skills of the Linkuistics skill packs — a thin delta over superpowers' writing-skills covering our description-shape rule (capability + "Use when", overriding upstream's when-only), the user/model-invoked lever, source-citation, and progressive-disclosure thresholds. Use when authoring, auditing, or reshaping a SKILL.md in this repo; user-invoked, run it by hand.
 harnesses: [any]
 disable-model-invocation: true
 ---
 
 # Authoring conventions — house delta
 
-This marketplace **depends on superpowers' `writing-skills`**: the superpowers
+The Linkuistics skill packs **depend on superpowers' `writing-skills`**: the superpowers
 `SessionStart` hook injects `using-superpowers` into every session, and that routes to
 `writing-skills` on demand. **Read `writing-skills` (and its bundled
 `anthropic-best-practices.md`) for the craft** — TDD-for-skills, bulletproofing,
@@ -127,8 +127,8 @@ description, so nothing but the human can reach it).
 ## House requirement: declare the harnesses
 
 Every `SKILL.md` in this repo carries a `harnesses:` key — a YAML flow list, on one
-line. `install.sh` reads it to decide which harnesses a skill is symlinked into, and
-`install.test.sh` fails if a bundled skill omits it.
+line. No installer reads it: the key is metadata that records which harnesses can
+follow the skill.
 
 ```yaml
 harnesses: [any]            # nothing here depends on a particular harness

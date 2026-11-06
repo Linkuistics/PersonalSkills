@@ -2,9 +2,9 @@
 # Check the frontmatter of every skill of the pack.
 #
 # - Each SKILL.md in a skill root, `skills/` or `craft/`, of a plugin under
-#   plugins/ declares `harnesses:`. Grove's plugins/install.sh reads that key,
-#   and it only reports a missing key. This check is the hard gate, as Grove's
-#   install.test.sh is for Grove's own skills.
+#   plugins/ declares `harnesses:`. No installer reads that key. It is metadata
+#   that records which harnesses can follow the skill, and this check keeps it
+#   present.
 # - The user-invoked skills keep `disable-model-invocation: true`.
 #
 # Usage: scripts/check-frontmatter.sh [<repository root>]

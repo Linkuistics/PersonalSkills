@@ -18,7 +18,7 @@ names it.
 
 `machine-environment` carries `assumes-personal-setup: true`. It names the
 owner's own machine configuration, so it is misleading on another machine.
-Grove's manual installer reports it.
+No installer reads the key. It warns a reader of the skill.
 
 ## The guardrail plugin
 
@@ -28,7 +28,8 @@ for confirmation before a destructive shell command and before an edit outside
 the project boundary. The hook never refuses a tool call.
 
 The mechanism works only in Claude Code, so `guardrail` is a native plugin and
-not a Ravel skill. No Ravel root of this repository reaches it.
+not a Ravel skill. No Ravel root of this repository reaches it. The `personal`
+formula carries the plugin and a Claude Code marketplace file that lists it.
 
 ## Layout
 
@@ -75,62 +76,65 @@ states the layout and the references between skills.
   `docs/specs/owner-skill-delivery.md`. One name then identifies the pack on
   both routes, as `research`, `design` and `writing` do for the other packs.
 - `guardrail` is the name that the native residue of that design gives the
-  plugin. The plugin holds only the skill of that name. Under a native
-  installation the skill is `guardrail:guardrail`.
+  plugin. The plugin holds only the skill of that name. Its harness identity
+  is `guardrail@personal`, and in a session the skill is
+  `guardrail:guardrail`.
 
 ## The dependency
 
 The `personal` plugin declares the `guardrail` plugin in its `dependencies`.
 A native user of Grove's former `linkuistics` plugin received `guardrail` with
-the personal skills. The dependency keeps that for a native user of the
-`personal` plugin, as the `writing` plugin keeps its hooks plugin. A Ravel user takes the
-craft skills from the `personal` source and enables only the `guardrail`
-plugin.
+the personal skills, and the dependency recorded that. No route installs the
+`personal` plugin now, so its manifest is layout metadata. Ravel delivers the
+craft skills from the `personal` source, and the user registers only the
+`guardrail` plugin.
 
 `guardrail` is user-invoked. Its description therefore costs no context in a
 session that does not start it.
 
 ## Install
 
-### Ravel
+### Skills
 
-Add this record to the `skills.sources` list of the Ravel settings. Replace
-`<checkout>` with the absolute path of a checkout of this repository:
-
-```json
-{ "id": "personal", "type": "local", "path": "<checkout>/plugins/personal", "roots": ["craft"] }
-```
-
-Ravel reads the checkout as a local directory. It does not fetch or update the
-checkout. A tool outside Ravel holds the checkout at a published commit.
-
-For `guardrail`, install the `guardrail` plugin in Claude Code, as the next
-section states.
-
-### Claude Code plugins
-
-Grove's marketplace lists these plugins. Install them as follows:
-
-```text
-/plugin marketplace add Linkuistics/grove
-/plugin install personal@linkuistics
-```
-
-The installation of `personal` also installs `guardrail`. To install only the
-guardrail, run `/plugin install guardrail@linkuistics`.
-
-### Manual installation
-
-Grove's manual installer links the craft skills into Codex, Gemini CLI and Pi:
+Install the `personal` formula with Homebrew:
 
 ```sh
-<grove checkout>/plugins/install.sh --pack <personal checkout>/plugins/personal
+brew tap Linkuistics/taps
+brew install personal
 ```
 
-The installer refuses a skill name that two scanned plugins ship. Older Grove
-commits hold copies of these skills in `plugins/linkuistics`, so their
-installer does not install this pack. Use a Grove checkout without
-`plugins/linkuistics`.
+The formula pins one commit of this repository. Its keg holds the source
+directory `plugins/personal` at `share/ravel/skills/personal`, and Homebrew
+links it into `$(brew --prefix)/share/ravel/skills/`. The keg also holds
+`plugins/guardrail` at `libexec/plugins/guardrail`, and the Claude Code
+marketplace file `personal` at its root.
+
+Ravel delivers the skills. Ravel 2.0.0 reads that directory when its settings
+name no sources, and it gives each session that it starts the skills of the
+root `craft`. `brew upgrade` keeps the pack current. No harness finds the
+skills in the keg alone, and this pack has no native marketplace entry or
+installer step for its skills.
+
+### The guardrail hook adapter
+
+Ravel installs no hook. Register `guardrail` in Claude Code once, with these
+documented commands:
+
+```sh
+claude plugin marketplace add "$(brew --prefix)/opt/personal"
+claude plugin install guardrail@personal
+```
+
+Claude Code stores the marketplace by the stable `opt` path and runs the
+plugin in place. An upgrade of the formula therefore needs no new command.
+`guardrail` exists only for Claude Code.
+
+### Development
+
+A checkout of this repository can serve as a trial source. Name
+`<checkout>/plugins/personal` with the root `craft` in the `skills` object of
+the Ravel settings. Ravel captures the uncommitted changes of the checkout.
+It does not fetch or update the checkout.
 
 ## Checks
 
@@ -143,7 +147,8 @@ task check
 - `task check:plugin` checks both plugins with `claude plugin validate`. It
   skips when Claude Code is not installed.
 - `task check:frontmatter` checks that each skill declares `harnesses:`.
-  Grove's installer reads that key. The task also checks that
+  No installer reads that key, and the check keeps it present as metadata.
+  The task also checks that
   `authoring-conventions` and `guardrail` keep
   `disable-model-invocation: true`.
 - `task check:guardrail-test` runs `guardrail-hook.test.sh`.
@@ -188,16 +193,18 @@ it. The move made these changes:
 
 No other byte of a moved file changed, and each file keeps its Git mode.
 
-`authoring-conventions` says "this marketplace" and "this repo". In Grove
-those words named Grove's marketplace and repository. The words stay. "This
-marketplace" names the Linkuistics marketplace, which lists this pack. "This
-repo" names the repository whose skill the author edits. The skill does not
-apply to one repository only.
+`authoring-conventions` said "this marketplace" and "this repo". In Grove
+those words named Grove's marketplace and repository. The commit for Homebrew
+installation changed "this marketplace" to "the Linkuistics skill packs",
+because no marketplace lists the packs now. "This repo" stays. It names the
+repository whose skill the author edits, and the skill does not apply to one
+repository only.
 
-The claims of `authoring-conventions` about Grove's `install.sh` and
-`install.test.sh` describe Grove's installer, which also installs this pack.
-This repository's `check:frontmatter` holds the check of `harnesses:` for its
-own skills.
+The same commit changed the claim of `authoring-conventions` that Grove's
+`install.sh` reads `harnesses:` and that `install.test.sh` checks it. The skill
+now states that no installer reads the key. This repository's
+`check:frontmatter` holds the check of `harnesses:` for its own skills. The
+commit also made this README state Homebrew installation and Ravel delivery.
 
 ## Licence
 
