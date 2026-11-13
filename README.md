@@ -99,9 +99,14 @@ session that does not start it.
 Install the `personal` formula with Homebrew:
 
 ```sh
-brew tap Linkuistics/taps
-brew install personal
+brew install linkuistics/taps/personal
 ```
+
+The fully qualified name needs no `brew tap` and no `brew trust`. Homebrew 6.0.0
+and later trust only the formula that such a name gives. The `personal` formula
+loads no other formula from the tap. Homebrew's
+[Tap Trust](https://docs.brew.sh/Tap-Trust#installing-from-a-tap) page gives
+the rules.
 
 The formula pins one commit of this repository. Its keg holds the source
 directory `plugins/personal` at `share/ravel/skills/personal`, and Homebrew
@@ -109,11 +114,17 @@ links it into `$(brew --prefix)/share/ravel/skills/`. The keg also holds
 `plugins/guardrail` at `libexec/plugins/guardrail`, and the Claude Code
 marketplace file `personal` at its root.
 
-Ravel delivers the skills. Ravel 2.0.0 reads that directory when its settings
+Ravel 2 delivers the skills. Ravel 2.0.0 reads that directory when its settings
 name no sources, and it gives each session that it starts the skills of the
 root `craft`. `brew upgrade` keeps the pack current. No harness finds the
 skills in the keg alone, and this pack has no native marketplace entry or
 installer step for its skills.
+
+Ravel 1.x delivers no skill, and the `personal` formula does not install Ravel.
+While the unversioned `ravel` formula is Ravel 1.x, install Ravel 2 as the
+keg-only `ravel@2`.
+[Chapter 3](https://github.com/Linkuistics/Ravel/blob/main/docs/book/src/03-a-complete-session.md)
+of Ravel's book gives the commands.
 
 ### The guardrail hook adapter
 
